@@ -62,9 +62,9 @@ const Songs = ({ navigation }) => {
     fetchSongs();
   }, []);
 
-  console.log('----------------------')
-  console.log('songs :', songs)
-  console.log('----------------------')
+  // console.log('----------------------')
+  // console.log('songs :', songs)
+  // console.log('----------------------')
 
   return (
     <View style={styles.container}>

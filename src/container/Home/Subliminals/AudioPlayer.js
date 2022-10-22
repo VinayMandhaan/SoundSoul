@@ -74,15 +74,46 @@ const AudioPlayer = ({ navigation, route }) => {
     if (songs) fetchSameGenre();
   }, []);
 
+  const trackPlayer = async() => {
+    var newSongs = songs.map(val => ({
+      ...val,
+      artist:'Vinay'
+    }))
+    console.log(newSongs,'NEW')
+    TrackPlayer.setupPlayer({waitForBuffer:true})
+    .then(async() => {
+      await TrackPlayer.add([...newSongs]);
+      TrackPlayer.updateOptions({
+        capabilities: [
+          TrackPlayer.CAPABILITY_PLAY,
+          TrackPlayer.CAPABILITY_PAUSE,
+          TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
+          TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS
+        ],
+        compactCapabilities: [
+          TrackPlayer.CAPABILITY_PLAY,
+          TrackPlayer.CAPABILITY_PAUSE,
+          TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
+          TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS
+        ]
+      })
+    })
+  }
+
   useEffect(() => {
-    if (item?.url) {
-      setCurrentSong(item);
-      // setSongStatus(true)
-    } else {
-      setCurrentSong(undefined);
-      // setSongStatus(false)
-    }
-  }, [item?.url]);
+    console.log(songs,'SONGS ARRAY')
+    trackPlayer()
+  },[])
+
+  // useEffect(() => {
+  //   if (item?.url) {
+  //     setCurrentSong(item);
+  //     // setSongStatus(true)
+  //   } else {
+  //     setCurrentSong(undefined);
+  //     // setSongStatus(false)
+  //   }
+  // }, [item?.url]);
 
   useEffect(() => {
     if (currentSong?.url) {
@@ -93,7 +124,7 @@ const AudioPlayer = ({ navigation, route }) => {
     }
 
     console.log("update for current song", currentSong);
-  }, [currentSong?.url]);
+  }, [currentSong]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -145,26 +176,6 @@ const AudioPlayer = ({ navigation, route }) => {
     // }
   };
 
-
-  TrackPlayer.setupPlayer({})
-    .then(() => {
-      TrackPlayer.updateOptions({
-        capabilities: [
-          TrackPlayer.CAPABILITY_PLAY,
-          TrackPlayer.CAPABILITY_PAUSE,
-          TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
-          TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS
-        ],
-        compactCapabilities: [
-          TrackPlayer.CAPABILITY_PLAY,
-          TrackPlayer.CAPABILITY_PAUSE,
-          TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
-          TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS
-        ]
-      })
-    })
-
-
   // TrackPlayer.updateOptions({
   //   stopWithApp: false,
   //   capabilities: [TrackPlayer.CAPABILITY_PLAY, TrackPlayer.CAPABILITY_PAUSE],
@@ -173,25 +184,39 @@ const AudioPlayer = ({ navigation, route }) => {
 
   const playSound = async (song) => {
 
-
+    console.log(song,'SONGSS')
+    console.log(currentSongIndex,'CURRENT')
     //---------- @temp
 
-    await pauseSound();
+    console.log(songInPrecess,'PROCESS')
+    console.log(currentSong,'CURRENT SONG')
+    console.log(await TrackPlayer.getCurrentTrack(),'TRACK CURRENT')
 
     if (song.url) {
 
-      await TrackPlayer.add({
-        id: song.id,
-        url: song.url,
-      });
+      // await TrackPlayer.add({
+      //   id: song.id,
+      //   url: song.url,
+      //   artist:'Vinay',
+      //   title:'HAHAHA'
+      // });
 
+      console.log(await TrackPlayer.getTrack(song.id.toString()),'QUEUE')
       setSongInProcess(true);
+      await TrackPlayer.pause()
+      console.log(await TrackPlayer.getState(),'ID')
+      await TrackPlayer.skip(song.id.toString())
       setSongStatus(true);
 
       // Start playing it
-      await TrackPlayer.play();
 
       setSongInProcess(false)
+      await TrackPlayer.play();
+      console.log(await TrackPlayer.getState(),'ID after')
+
+
+
+
 
     }
 
@@ -355,6 +380,7 @@ const AudioPlayer = ({ navigation, route }) => {
                             <TouchableOpacity
                               key={index}
                               onPress={() => {
+                                console.log('HII')
                                 setCurrentSong(song);
                                 setCurrentSongIndex(index);
                                 // playSound(song);
@@ -375,9 +401,11 @@ const AudioPlayer = ({ navigation, route }) => {
                             <TouchableOpacity
                               key={index}
                               onPress={() => {
+                                console.log('HII DIFF')
+                                // pauseSound()
                                 setCurrentSong(song);
                                 setCurrentSongIndex(index);
-                                // playSound(song);
+                                playSound(song);
                               }}
                               style={styles.gernre2}
                             >
