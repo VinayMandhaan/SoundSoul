@@ -202,8 +202,8 @@ const AudioPlayer = ({ navigation, route }) => {
       // });
 
       console.log(await TrackPlayer.getTrack(song.id.toString()),'QUEUE')
-      setSongInProcess(true);
       await TrackPlayer.pause()
+      setSongInProcess(true);
       console.log(await TrackPlayer.getState(),'ID')
       await TrackPlayer.skip(song.id.toString())
       setSongStatus(true);
@@ -402,10 +402,10 @@ const AudioPlayer = ({ navigation, route }) => {
                               key={index}
                               onPress={() => {
                                 console.log('HII DIFF')
-                                // pauseSound()
+                                pauseSound()
                                 setCurrentSong(song);
                                 setCurrentSongIndex(index);
-                                playSound(song);
+                                // playSound(song);
                               }}
                               style={styles.gernre2}
                             >

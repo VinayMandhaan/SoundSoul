@@ -70,7 +70,7 @@ function ModalContainer({
   };
 
   const addToList = async () => {
-
+    
     if (onChangeNumber) {
 
       setCreatePlaylistLoading(true);
@@ -90,6 +90,7 @@ function ModalContainer({
         )
           .then((response) => response.json())
           .then((response) => {
+            console.log('ADDDDEDDDDDD')
             console.log("Add To List :", response.data);
             if (response.data.errors) {
               setCreatePlaylistLoading(false);
@@ -102,6 +103,7 @@ function ModalContainer({
             }
           });
       } catch (err) {
+        console.log(err,'ERRRORRRRRR')
         setCreatePlaylistLoading(false);
         console.log("Error from catch in Add TO List actions", err);
       }
