@@ -7,7 +7,7 @@ import { backIcon, drawerIcon } from "../../../constants/Images";
 import SongModal from "../../../components/SongModal";
 
 const Songs = ({ navigation, route }) => {
-  const {selectedSublimal,sublimalID} = route.params
+  const {selectedSublimal,sublimalID, fromPlayList,songsID} = route.params
   const [songs, setSongs] = useState([]);
   const [error, setError] = useState("");
 
@@ -47,12 +47,23 @@ const Songs = ({ navigation, route }) => {
       .then((res) => {
         if (res.status) {
           var checkData = res.data?.songs
-          var result = checkData.map(val => {
-            if(val.sublimal == sublimalID) {
-              console.log('GOT IT')
-            }
-          })
-          setSongs(res.data.songs);
+          if(fromPlayList){
+            var result = checkData.filter(function(value) {
+              if(songsID.indexOf(value.id) !== -1) {
+                  return value
+              }
+          });
+          console.log(result,'RESULT')
+          setSongs(result)
+          } else {
+            var result = checkData.map(val => {
+              if(val.sublimal == sublimalID) {
+                console.log('GOT IT')
+              }
+            })
+          setSongs(checkData)
+          }
+          // setSongs(result);
         } else {
           const err = "Something went wrong please try again later";
           setError(err);

@@ -129,7 +129,9 @@ function CategoryList({ navigation, route }) {
                                  onPress={() => {
                                     navigation.navigate('Songs', {
                                         selectedSublimal:selectedSublimal,
-                                        sublimalID:sublimalID
+                                        sublimalID:sublimalID,
+                                        fromPlayList:false,
+                                        songsID:[]
                                     })
                                  }}
                                 >
