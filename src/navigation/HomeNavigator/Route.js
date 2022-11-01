@@ -62,7 +62,7 @@ function HomeNavigation(props) {
           headerTitle: () => null,
         }}
         name="Songs"
-        component={Subliminals}
+        component={Songs}
       />
       <Stack.Screen
         options={{

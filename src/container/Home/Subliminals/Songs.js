@@ -6,7 +6,8 @@ import HeaderLeft from "../../../components/HeaderLeft";
 import { backIcon, drawerIcon } from "../../../constants/Images";
 import SongModal from "../../../components/SongModal";
 
-const Songs = ({ navigation }) => {
+const Songs = ({ navigation, route }) => {
+  const {selectedSublimal,sublimalID} = route.params
   const [songs, setSongs] = useState([]);
   const [error, setError] = useState("");
 
@@ -45,7 +46,13 @@ const Songs = ({ navigation }) => {
       .then((response) => response.json())
       .then((res) => {
         if (res.status) {
-          setSongs(res.data);
+          var checkData = res.data?.songs
+          var result = checkData.map(val => {
+            if(val.sublimal == sublimalID) {
+              console.log('GOT IT')
+            }
+          })
+          setSongs(res.data.songs);
         } else {
           const err = "Something went wrong please try again later";
           setError(err);
